@@ -1,14 +1,16 @@
-name: Build
+name: Publish
 on:
-  push:
-    branches:
-      - main
-      - beta
+  workflow_dispatch:
+  release:
+    types: [published]
+permissions:
+  contents: read
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   prebuild:
+    if: github.repository == 'DragonWork/bindings-cpp'
     strategy:
       matrix:
         include:
@@ -107,6 +109,9 @@ jobs:
     needs: prebuild
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -116,10 +121,25 @@ jobs:
           path: prebuilds
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Check release version
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: node -e "if (process.env.RELEASE_TAG !== 'v' + require('./package.json').version) throw new Error('Release tag must match package.json version')"
       - run: npm ci
       - run: npm run build
-      - run: npm run semantic-release
+      - run: npm run typecheck
+      - run: npm test
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_OPTIONS: --no-experimental-strip-types
+      - run: npm pack
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: dragonwork-serialport-bindings-cpp-*.tgz
+          if-no-files-found: error
+      - name: Publish to npm
+        if: github.event_name == 'release'
+        run: npm publish dragonwork-serialport-bindings-cpp-*.tgz --access public --tag latest
