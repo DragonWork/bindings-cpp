@@ -2,9 +2,8 @@
 #include <uv.h>
 #include "./poller.h"
 
-Poller::Poller (const Napi::CallbackInfo &info) : Napi::ObjectWrap<Poller>(info),
-  async_context(info.Env(), "serialport:Poller")
-  {
+Poller::Poller(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Poller>(info),
+  async_context(info.Env(), "serialport:Poller") {
   Napi::Env env = info.Env();
   Napi::HandleScope scope(env);
   if (!info[0].IsNumber()) {
@@ -81,7 +80,7 @@ void Poller::onData(uv_poll_t* handle, int status, int events) {
   // if Error
   if (0 != status) {
     // fprintf(stdout, "OnData Error status=%s events=%d\n", uv_strerror(status), events);
-    obj->_stop(); // doesn't matter if this errors
+    obj->_stop();  // doesn't matter if this errors
     obj->callback.MakeCallback(env.Global(),
       {Napi::Error::New(env, uv_strerror(status)).Value(), env.Undefined()}, obj->async_context);
   } else {
@@ -93,7 +92,6 @@ void Poller::onData(uv_poll_t* handle, int status, int events) {
     // nextTick and Promise continuations before the event loop waits again.
     obj->callback.MakeCallback(env.Global(), {env.Null(), Napi::Number::New(env, events)}, obj->async_context);
   }
-
 }
 
 Napi::Object Poller::Init(Napi::Env env, Napi::Object exports) {
@@ -156,7 +154,7 @@ Napi::Value Poller::destroy(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::HandleScope scope(env);
   Poller* obj = this;
-  // TODO Fix destruction Segfault
+  // TODO(serialport): Fix destruction Segfault
   obj->Reset();
   // delete obj;
   return env.Undefined();
@@ -164,7 +162,7 @@ Napi::Value Poller::destroy(const Napi::CallbackInfo& info) {
 
 inline Napi::FunctionReference & Poller::constructor() {
   static Napi::FunctionReference my_constructor;
-  // TODO Check if required
+  // TODO(serialport): Check if required
   // my_constructor.SuppressDestruct();
   return my_constructor;
 }

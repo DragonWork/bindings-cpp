@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import debugFactory from 'debug'
 import { DarwinBinding, DarwinBindingInterface } from './darwin'
 import { LinuxBinding, LinuxBindingInterface } from './linux'

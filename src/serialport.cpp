@@ -289,7 +289,7 @@ inline SerialPortParity ToParityEnum(const Napi::String& napistr) {
   return parity;
 }
 
- inline SerialPortStopBits ToStopBitEnum(double stopBits) {
+inline SerialPortStopBits ToStopBitEnum(double stopBits) {
   if (stopBits > 1.4 && stopBits < 1.6) {
     return SERIALPORT_STOPBITS_ONE_FIVE;
   }

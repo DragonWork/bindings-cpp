@@ -2,6 +2,10 @@ name: Test / Lint
 on:
   push:
   pull_request:
+permissions:
+  contents: read
+env:
+  NODE_OPTIONS: --no-experimental-strip-types
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -9,31 +13,37 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v7.0.1
+    - uses: actions/setup-node@v7.0.0
       with:
-        node-version: 20
+        node-version: 26
+        package-manager-cache: false
     - run: npm ci
     - run: npm run lint
     - run: npm run typecheck
   test:
     runs-on: ${{ matrix.config.os }}
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x, 24.x, 26.x]
         config:
           # arch isn't used and we have no way to use it currently
           - { os: macos-latest, arch: x64 }
           - { os: ubuntu-latest, arch: x64 }
-          - { os: windows-2019, arch: x64 }
+          - { os: windows-latest, arch: x64 }
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v7.0.1
+    - uses: actions/setup-python@v7.0.0
+      with:
+        python-version: '3.14'
+    - uses: actions/setup-node@v7.0.0
       with:
         node-version: ${{ matrix.node-version }}
+        package-manager-cache: false
     - run: npm ci
     - run: npm run rebuild
     - run: npm test
-    - uses: codecov/codecov-action@v4
+    - uses: codecov/codecov-action@v7.0.0
       with:
         directory: ./coverage/

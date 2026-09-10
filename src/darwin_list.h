@@ -1,5 +1,5 @@
-#ifndef PACKAGES_SERIALPORT_SRC_DARWIN_LIST_H_
-#define PACKAGES_SERIALPORT_SRC_DARWIN_LIST_H_
+#ifndef SRC_DARWIN_LIST_H_
+#define SRC_DARWIN_LIST_H_
 #include <sys/param.h>  // For MAXPATHLEN
 #include <napi.h>
 #include <uv.h>
@@ -22,7 +22,9 @@ struct ListResultItem {
 };
 
 struct ListBaton : public Napi::AsyncWorker {
-  ListBaton(Napi::Function& callback) : Napi::AsyncWorker(callback, "node-serialport:ListBaton"), 
+  // NOLINTNEXTLINE(runtime/explicit)
+  ListBaton(Napi::Function& callback)  // NOLINT(runtime/references)
+      : Napi::AsyncWorker(callback, "node-serialport:ListBaton"),
   errorString() {}
   std::list<ListResultItem*> results;
   char errorString[ERROR_STRING_SIZE];
@@ -65,4 +67,4 @@ typedef struct DeviceListItem {
     int* length;
 } stDeviceListItem;
 
-#endif  // PACKAGES_SERIALPORT_SRC_DARWIN_LIST_H_
+#endif  // SRC_DARWIN_LIST_H_

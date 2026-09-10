@@ -300,7 +300,6 @@ void GetBaton::Execute() {
 }
 
 void GetBaudRateBaton::Execute() {
-
   DCB dcb = { 0 };
   SecureZeroMemory(&dcb, sizeof(DCB));
   dcb.DCBlength = sizeof(DCB);
@@ -380,7 +379,8 @@ void EIO_AfterWrite(uv_async_t* req) {
 
   v8::Local<v8::Value> argv[1];
   if (baton->errorString[0]) {
-    baton->callback.MakeCallback(env.Global(), {Napi::Error::New(env, baton->errorString).Value()}, baton->async_context);
+    baton->callback.MakeCallback(env.Global(),
+      {Napi::Error::New(env, baton->errorString).Value()}, baton->async_context);
   } else {
     baton->callback.MakeCallback(env.Global(), {env.Null()}, baton->async_context);
   }
@@ -404,9 +404,9 @@ Napi::Value Write(const Napi::CallbackInfo& info) {
     return env.Null();
   }
   Napi::Buffer<char> buffer = info[1].As<Napi::Buffer<char>>();
-  //getBufferFromObject(info[1].ToObject().ti);
-  char* bufferData = buffer.Data(); //.As<Napi::Buffer<char>>().Data();
-  size_t bufferLength = buffer.Length();//.As<Napi::Buffer<char>>().Length();
+  // getBufferFromObject(info[1].ToObject().ti);
+  char* bufferData = buffer.Data();  // .As<Napi::Buffer<char>>().Data();
+  size_t bufferLength = buffer.Length();  // .As<Napi::Buffer<char>>().Length();
 
   // callback
   if (!info[2].IsFunction()) {
@@ -593,7 +593,8 @@ Napi::Value Read(const Napi::CallbackInfo& info) {
   size_t bytesToRead = info[3].ToNumber().Int64Value();
 
   if ((bytesToRead + offset) > bufferLength) {
-    Napi::TypeError::New(env, "'bytesToRead' + 'offset' cannot be larger than the buffer's length").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "'bytesToRead' + 'offset' cannot be larger than the buffer's length")
+      .ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -814,7 +815,6 @@ void getSerialNumber(const wchar_t *vid,
 }
 
 void ListBaton::Execute() {
-
   GUID *guidDev = (GUID*)& GUID_DEVCLASS_PORTS;  // NOLINT
   HDEVINFO hDevInfo = SetupDiGetClassDevs(guidDev, NULL, NULL, DIGCF_PRESENT | DIGCF_PROFILE);
   SP_DEVINFO_DATA deviceInfoData;

@@ -272,7 +272,6 @@ static stDeviceListItem* GetSerialDevices() {
 }
 
 void ListBaton::Execute() {
-
   if (!lockInitialised) {
     uv_mutex_init(&list_mutex);
     lockInitialised = TRUE;

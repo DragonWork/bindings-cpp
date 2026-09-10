@@ -22,7 +22,7 @@ const makeFsReadError = (code: string) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const sequenceCalls = (...functions: Function[]) => {
   const funcs = [...functions]
   return (...args: any[]) => {

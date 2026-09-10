@@ -80,7 +80,6 @@ int ToDataBitsConstant(int dataBits) {
 }
 
 void OpenBaton::Execute() {
-
   int flags = (O_RDWR | O_NOCTTY | O_NONBLOCK | O_CLOEXEC | O_SYNC);
   int fd = open(path, flags);
 
@@ -121,7 +120,8 @@ void ConnectionOptionsBaton::Execute() {
         this->SetError(errorString);
         return;
       } else if (err == -2) {
-        snprintf(errorString, sizeof(errorString), "Error: %s || while setting custom baud rate of %d", strerror(errno), this->baudRate);
+        snprintf(errorString, sizeof(errorString), "Error: %s || while setting custom baud rate of %d",
+                 strerror(errno), this->baudRate);
         this->SetError(errorString);
         return;
       }
@@ -135,7 +135,8 @@ void ConnectionOptionsBaton::Execute() {
     if (-1 == baudRate) {
       speed_t speed = this->baudRate;
       if (-1 == ioctl(fd, IOSSIOSPEED, &speed)) {
-        snprintf(errorString, sizeof(errorString), "Error: %s calling ioctl(.., IOSSIOSPEED, %ld )", strerror(errno), speed);
+        snprintf(errorString, sizeof(errorString), "Error: %s calling ioctl(.., IOSSIOSPEED, %ld )",
+                 strerror(errno), speed);
         this->SetError(errorString);
         return;
       } else {
@@ -164,7 +165,7 @@ void ConnectionOptionsBaton::Execute() {
 int setup(int fd, OpenBaton *data) {
   int dataBits = ToDataBitsConstant(data->dataBits);
   if (-1 == dataBits) {
-    snprintf(data->errorString, sizeof(data->errorString),"Invalid data bits setting %d", data->dataBits);
+    snprintf(data->errorString, sizeof(data->errorString), "Invalid data bits setting %d", data->dataBits);
     return -1;
   }
 
@@ -344,7 +345,8 @@ int setBaudRate(ConnectionOptions *data) {
   #endif
 
   if (-1 == baudRate) {
-    snprintf(data->errorString, sizeof(data->errorString), "Error baud rate of %d is not supported on your platform", data->baudRate);
+    snprintf(data->errorString, sizeof(data->errorString), "Error baud rate of %d is not supported on your platform",
+             data->baudRate);
     return -1;
   }
 
@@ -359,7 +361,6 @@ int setBaudRate(ConnectionOptions *data) {
 }
 
 void CloseBaton::Execute() {
-
   if (-1 == close(fd)) {
     snprintf(errorString, sizeof(errorString), "Error: %s, unable to close fd %d", strerror(errno), fd);
     this->SetError(errorString);
@@ -367,7 +368,6 @@ void CloseBaton::Execute() {
 }
 
 void SetBaton::Execute() {
-
   int bits;
   ioctl(fd, TIOCMGET, &bits);
 
@@ -410,12 +410,13 @@ void SetBaton::Execute() {
 
   #if defined(__linux__)
   int err = linuxSetLowLatencyMode(fd, lowLatency);
-  // Only report errors when the lowLatency is being set to true.  Attempting to set as false can error, since the default is false
+  // Only report errors when lowLatency is being set to true.
+  // Attempting to set it to false can error, since the default is false.
   if (lowLatency) {
     if (err == -1) {
       snprintf(errorString, sizeof(errorString), "Error: %s, cannot get low latency", strerror(errno));
       return;
-    } else if(err == -2) {
+    } else if (err == -2) {
       snprintf(errorString, sizeof(errorString), "Error: %s, cannot set low latency", strerror(errno));
       return;
     }
@@ -464,7 +465,6 @@ void GetBaudRateBaton::Execute() {
 }
 
 void FlushBaton::Execute() {
-
   if (-1 == tcflush(fd, TCIOFLUSH)) {
     snprintf(errorString, sizeof(errorString), "Error: %s, cannot flush", strerror(errno));
     this->SetError(errorString);
@@ -473,7 +473,6 @@ void FlushBaton::Execute() {
 }
 
 void DrainBaton::Execute() {
-
   if (-1 == tcdrain(fd)) {
     snprintf(errorString, sizeof(errorString), "Error: %s, cannot drain", strerror(errno));
     this->SetError(errorString);
