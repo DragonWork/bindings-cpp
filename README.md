@@ -1,4 +1,30 @@
-# @serialport/bindings-cpp
+# @dragonwork/serialport-bindings-cpp
+
+Temporary fork of `@serialport/bindings-cpp` with the native callback fixes from
+[serialport/bindings-cpp#243](https://github.com/serialport/bindings-cpp/pull/243).
+The upstream API is unchanged. Use an npm alias to keep existing imports:
+
+```json
+"@serialport/bindings-cpp": "npm:@dragonwork/serialport-bindings-cpp@13.0.1-patch.1"
+```
+
+### Publishing this fork
+
+The **Publish** workflow rebuilds upstream's native prebuild matrix and packs it
+with the compiled JavaScript. Running it manually only uploads the `npm-package`
+artifact; it does not publish.
+
+For the first publication, own the `@dragonwork` scope on npm, run the workflow,
+download and extract `npm-package`, then use `npm login` and
+`npm publish dragonwork-serialport-bindings-cpp-13.0.1-patch.1.tgz --access public --tag latest`.
+
+In the npm package settings, add a trusted publisher for GitHub owner `DragonWork`,
+repository `bindings-cpp`, workflow `publish.yml`, with direct `npm publish`
+allowed. No npm token is needed in GitHub. Future GitHub releases publish through
+OIDC; their tags must match `v` plus the version in `package.json` (also update
+`package-lock.json`). Do not create a release for an already published version.
+
+## Upstream documentation
 
 [![Backers on Open Collective](https://opencollective.com/serialport/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/serialport/sponsors/badge.svg)](#sponsors)
