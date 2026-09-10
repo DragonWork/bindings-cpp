@@ -5,7 +5,7 @@ Temporary fork of `@serialport/bindings-cpp` with the native callback fixes from
 The upstream API is unchanged. Use an npm alias to keep existing imports:
 
 ```json
-"@serialport/bindings-cpp": "npm:@dragonwork/serialport-bindings-cpp@13.0.1-patch.1"
+"@serialport/bindings-cpp": "npm:@dragonwork/serialport-bindings-cpp@13.0.2"
 ```
 
 ## Upstream documentation
