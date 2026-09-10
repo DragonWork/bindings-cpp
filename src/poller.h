@@ -1,5 +1,5 @@
-#ifndef PACKAGES_SERIALPORT_SRC_POLLER_H_
-#define PACKAGES_SERIALPORT_SRC_POLLER_H_
+#ifndef SRC_POLLER_H_
+#define SRC_POLLER_H_
 
 #include <napi.h>
 #include <uv.h>
@@ -16,7 +16,7 @@ class Poller : public Napi::ObjectWrap<Poller> {
  private:
   int fd;
   uv_poll_t* poll_handle = nullptr;
-	Napi::FunctionReference callback;
+  Napi::FunctionReference callback;
   Napi::AsyncContext async_context;
   bool uv_poll_init_success = false;
 
@@ -33,4 +33,4 @@ class Poller : public Napi::ObjectWrap<Poller> {
   static inline Napi::FunctionReference & constructor();
 };
 
-#endif  // PACKAGES_SERIALPORT_SRC_POLLER_H_
+#endif  // SRC_POLLER_H_
