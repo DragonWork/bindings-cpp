@@ -1,5 +1,5 @@
 .DS_Store
-.eslintrc.js
+eslint.config.mjs
 .releaserc
 .github
 .mocharc.js
