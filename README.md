@@ -5,7 +5,7 @@ Temporary fork of `@serialport/bindings-cpp` with the native callback fixes from
 The upstream API is unchanged. Use an npm alias to keep existing imports:
 
 ```json
-"@serialport/bindings-cpp": "npm:@dragonwork/serialport-bindings-cpp@13.0.1-patch.1"
+"@serialport/bindings-cpp": "npm:@dragonwork/serialport-bindings-cpp@13.0.2"
 ```
 
 ### Publishing this fork
@@ -16,7 +16,7 @@ artifact; it does not publish.
 
 For the first publication, own the `@dragonwork` scope on npm, run the workflow,
 download and extract `npm-package`, then use `npm login` and
-`npm publish dragonwork-serialport-bindings-cpp-13.0.1-patch.1.tgz --access public --tag latest`.
+`npm publish dragonwork-serialport-bindings-cpp-13.0.2.tgz --access public --tag latest`.
 
 In the npm package settings, add a trusted publisher for GitHub owner `DragonWork`,
 repository `bindings-cpp`, workflow `publish.yml`, with direct `npm publish`
