@@ -1,4 +1,14 @@
-# @serialport/bindings-cpp
+# @dragonwork/serialport-bindings-cpp
+
+Temporary fork of `@serialport/bindings-cpp` with the native callback fixes from
+[serialport/bindings-cpp#243](https://github.com/serialport/bindings-cpp/pull/243).
+The upstream API is unchanged. Use an npm alias to keep existing imports:
+
+```json
+"@serialport/bindings-cpp": "npm:@dragonwork/serialport-bindings-cpp@13.0.1-patch.1"
+```
+
+## Upstream documentation
 
 [![Backers on Open Collective](https://opencollective.com/serialport/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/serialport/sponsors/badge.svg)](#sponsors)
