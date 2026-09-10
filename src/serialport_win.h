@@ -1,5 +1,5 @@
-#ifndef PACKAGES_SERIALPORT_SRC_SERIALPORT_WIN_H_
-#define PACKAGES_SERIALPORT_SRC_SERIALPORT_WIN_H_
+#ifndef SRC_SERIALPORT_WIN_H_
+#define SRC_SERIALPORT_WIN_H_
 #include <napi.h>
 #include <uv.h>
 #include <node_buffer.h>
@@ -22,7 +22,7 @@ struct WriteBaton {
   void* hThread = nullptr;
   bool complete = false;
   Napi::ObjectReference buffer;
-	Napi::FunctionReference callback;
+  Napi::FunctionReference callback;
   Napi::AsyncContext async_context;
   int result = 0;
   char errorString[ERROR_STRING_SIZE];
@@ -39,7 +39,7 @@ struct ReadBaton {
   size_t bytesToRead = 0;
   size_t offset = 0;
   void* hThread = nullptr;
-	Napi::FunctionReference callback;
+  Napi::FunctionReference callback;
   Napi::AsyncContext async_context;
   bool complete = false;
   char errorString[ERROR_STRING_SIZE];
@@ -63,7 +63,9 @@ struct ListResultItem {
 };
 
 struct ListBaton : public Napi::AsyncWorker {
-  ListBaton(Napi::Function& callback) : Napi::AsyncWorker(callback, "node-serialport:ListBaton"), 
+  // NOLINTNEXTLINE(runtime/explicit)
+  ListBaton(Napi::Function& callback)  // NOLINT(runtime/references)
+      : Napi::AsyncWorker(callback, "node-serialport:ListBaton"),
   errorString() {}
   std::list<ListResultItem*> results;
   wchar_t errorString[ERROR_STRING_SIZE];
@@ -92,4 +94,4 @@ struct ListBaton : public Napi::AsyncWorker {
   }
 };
 
-#endif  // PACKAGES_SERIALPORT_SRC_SERIALPORT_WIN_H_
+#endif  // SRC_SERIALPORT_WIN_H_
